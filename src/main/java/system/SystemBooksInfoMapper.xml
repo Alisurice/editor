@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="system.SystemBooksInfoMapper">
+  <resultMap id="BaseResultMap" type="SystemBooksInfo">
+    <id column="bookId" jdbcType="INTEGER" property="bookid" />
+    <id column="bookName" jdbcType="VARCHAR" property="bookname" />
+    <result column="focus_top" jdbcType="INTEGER" property="focusTop" />
+    <result column="focus_left" jdbcType="INTEGER" property="focusLeft" />
+    <result column="current_group_id" jdbcType="INTEGER" property="currentGroupId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    bookId, bookName, focus_top, focus_left, current_group_id
+  </sql>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="SystemBooksInfoKey">
+    delete from _system_books_info_
+    where bookId = #{bookid,jdbcType=INTEGER}
+      and bookName = #{bookname,jdbcType=VARCHAR}
+  </delete>
+<!--  <insert id="insert" parameterType="pojo.SystemBooksInfo">-->
+<!--    insert into _system_books_info_ (bookId, bookName, focus_top, -->
+<!--      focus_left, current_group_id)-->
+<!--    values (#{bookid,jdbcType=INTEGER}, #{bookname,jdbcType=VARCHAR}, #{focusTop,jdbcType=INTEGER}, -->
+<!--      #{focusLeft,jdbcType=INTEGER}, #{currentGroupId,jdbcType=INTEGER})-->
+<!--  </insert>-->
+
+<!--  不插入bookid，bookid是自动生成的-->
+  <insert id="insert" parameterType="SystemBooksInfo">
+    insert into _system_books_info_ (bookName, focus_top,
+      focus_left, current_group_id)
+    values (#{bookname,jdbcType=VARCHAR}, #{focusTop,jdbcType=INTEGER},
+      #{focusLeft,jdbcType=INTEGER}, #{currentGroupId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="SystemBooksInfo">
+    insert into _system_books_info_
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="bookid != null">
+        bookId,
+      </if>
+      <if test="bookname != null">
+        bookName,
+      </if>
+      <if test="focusTop != null">
+        focus_top,
+      </if>
+      <if test="focusLeft != null">
+        focus_left,
+      </if>
+      <if test="currentGroupId != null">
+        current_group_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="bookid != null">
+        #{bookid,jdbcType=INTEGER},
+      </if>
+      <if test="bookname != null">
+        #{bookname,jdbcType=VARCHAR},
+      </if>
+      <if test="focusTop != null">
+        #{focusTop,jdbcType=INTEGER},
+      </if>
+      <if test="focusLeft != null">
+        #{focusLeft,jdbcType=INTEGER},
+      </if>
+      <if test="currentGroupId != null">
+        #{currentGroupId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="SystemBooksInfo">
+    update _system_books_info_
+    <set>
+      <if test="focusTop != null">
+        focus_top = #{focusTop,jdbcType=INTEGER},
+      </if>
+      <if test="focusLeft != null">
+        focus_left = #{focusLeft,jdbcType=INTEGER},
+      </if>
+      <if test="currentGroupId != null">
+        current_group_id = #{currentGroupId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where bookId = #{bookid,jdbcType=INTEGER}
+      and bookName = #{bookname,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="SystemBooksInfo">
+    update _system_books_info_
+    set focus_top = #{focusTop,jdbcType=INTEGER},
+      focus_left = #{focusLeft,jdbcType=INTEGER},
+      current_group_id = #{currentGroupId,jdbcType=INTEGER}
+    where bookId = #{bookid,jdbcType=INTEGER}
+      and bookName = #{bookname,jdbcType=VARCHAR}
+  </update>
+
+
+
+<!--  ##############自定义-->
+  <update id="updateCurrentBook" parameterType="SystemBooksInfo">
+    update _system_books_info_
+    set focus_top = #{focusTop,jdbcType=INTEGER},
+      focus_left = #{focusLeft,jdbcType=INTEGER},
+      current_group_id = #{currentGroupId,jdbcType=INTEGER},
+      bookName = #{bookname,jdbcType=VARCHAR}
+    where bookId = 0
+
+  </update>
+  <select id="selectCurrentBook"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from _system_books_info_
+    where bookId = 0;
+  </select>
+  <select id="selectByBookName" parameterType="SystemBooksInfoKey" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from _system_books_info_
+    where bookName = #{bookname,jdbcType=VARCHAR}
+  </select>
+
+
+</mapper>

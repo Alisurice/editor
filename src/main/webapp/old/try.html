@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>适配移动端的拖动效果</title>
+    <style>
+        /* #div1{
+             height: 1000px;
+         }*/
+        #div2{
+            position: absolute;
+            top:0;
+            left:0;
+            width: 100px;
+            height: 100px;
+            background: #bbbbbb;
+        }
+    </style>
+</head>
+<body>
+<!--<div id="div1">-->
+<div id="div2"></div>
+<!--</div>-->
+<script>
+
+    function preventDefault(e) {
+        e.preventDefault();
+    }
+
+    // 禁用触摸滚动页面
+    document.addEventListener('touchmove', preventDefault, {passive: false});
+
+    // 恢复触摸滚动页面
+    // document.removeEventListener('touchmove', preventDefault, {passive: false});
+    var flag = false;//鼠标|手指是否按下的标记
+    var cur = {//记录鼠标|手指按下时的坐标
+        x:0,
+        y:0
+    }
+    var nx,ny,dx,dy,x,y ;
+    //按下时的函数
+    function down(){
+        flag = true;//确认鼠标|手指按下
+        var touch ;
+        if(event.touches){
+            touch = event.touches[0];//多个鼠标|手指事件取第一个
+        }else {
+            touch = event;
+        }
+        cur.x = touch.clientX; //记录鼠标|手指当前的x坐标
+        cur.y = touch.clientY;//记录鼠标|手指当前的y坐标
+        dx = div2.offsetLeft;//记录div当时的左偏移量
+        dy = div2.offsetTop;//记录div的上偏移量
+    }
+    function move(){
+        if(flag){//如果是鼠标|手指按下则继续执行
+            var touch ;
+            if(event.touches){
+                touch = event.touches[0];
+            }else {
+                touch = event;
+            }
+            nx = touch.clientX - cur.x;//记录在鼠标|手指x轴移动的数据
+            ny = touch.clientY - cur.y;//记录在鼠标|手指y轴移动的数据
+            x = dx+nx; //div在x轴的偏移量加上鼠标|手指在x轴移动的距离
+            y = dy+ny; //div在y轴的偏移量加上鼠标|手指在y轴移动的距离
+            div2.style.left = x+"px";
+            div2.style.top = y +"px";
+            //阻止页面的滑动默认事件
+            document.addEventListener("touchmove",function(){
+                event.preventDefault();
+            },false);
+        }
+    }
+    //鼠标|手指释放时候的函数
+    function end(){
+        flag = false; //鼠标|手指释放
+    }
+    var div2 = document.getElementById("div2");
+    div2.addEventListener("mousedown",function(){
+        down();
+    },false);
+    div2.addEventListener("touchstart",function(){
+        down();
+    },false)
+    div2.addEventListener("mousemove",function(){
+        move();
+    },false);
+    div2.addEventListener("touchmove",function(){
+        move();
+    },false)
+    document.body.addEventListener("mouseup",function(){
+        end();
+    },false);
+    div2.addEventListener("touchend",function(){
+        end();
+    },false);
+</script>
+</body>
+</html>

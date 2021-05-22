@@ -1,0 +1,52 @@
+.Book{
+    border: 1px solid #141dff;
+    width: 1000px;
+    height: 1000px;
+    position: relative;
+    /*overflow: scroll;*/
+}
+.textBlock {
+    border: 1px solid #ff3a13;
+    max-width: min-content;
+    position: absolute;
+    /*z-index: 1;*/
+}
+.nav{
+    visibility:hidden;
+    width: 15em;
+    height: 1em;
+    overflow: auto;
+    resize: horizontal;
+    border: 1px solid black;
+}
+.content{
+    word-break: break-word;
+    word-wrap:break-word;
+    /*height: 400px;*/
+    /*border-style: hidden;*/
+    /*padding: 0px;*/
+    /*margin: 0px;*/
+}
+
+/*避免点击编辑区出现默认的黑框样式*/
+[contenteditable]:focus{
+    outline: black solid 1px;
+
+}
+
+.textBlock:hover .nav{
+    color: #1e88e5;
+    visibility:visible;
+}
+
+
+
+.content * {
+    /*使内部元素能够跟着外部的大小调整，是通过100%这个相对宽度实现的*/
+    resize: none;
+    /*限制content内部元素大小*/
+    max-width: 100%;
+}
+/*.blockContainer img{*/
+/*    height: auto;*/
+/*}*/

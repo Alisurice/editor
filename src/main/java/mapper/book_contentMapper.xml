@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.book_contentMapper">
+  <resultMap id="BaseResultMap" type="pojo.book_content">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="bookName" jdbcType="VARCHAR" property="bookname" />
+    <result column="groupId" jdbcType="INTEGER" property="groupid" />
+    <result column="time_insert" jdbcType="TIMESTAMP" property="timeInsert" />
+    <result column="time_update" jdbcType="TIMESTAMP" property="timeUpdate" />
+    <result column="delta" jdbcType="VARCHAR" property="delta" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, bookName, groupId, time_insert, time_update, delta
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from book_content
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from book_content
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="pojo.book_content">
+    insert into book_content (id, bookName, groupId, 
+      time_insert, time_update, delta
+      )
+    values (#{id,jdbcType=INTEGER}, #{bookname,jdbcType=VARCHAR}, #{groupid,jdbcType=INTEGER}, 
+      #{timeInsert,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, #{delta,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="pojo.book_content">
+    insert into book_content
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="bookname != null">
+        bookName,
+      </if>
+      <if test="groupid != null">
+        groupId,
+      </if>
+      <if test="timeInsert != null">
+        time_insert,
+      </if>
+      <if test="timeUpdate != null">
+        time_update,
+      </if>
+      <if test="delta != null">
+        delta,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="bookname != null">
+        #{bookname,jdbcType=VARCHAR},
+      </if>
+      <if test="groupid != null">
+        #{groupid,jdbcType=INTEGER},
+      </if>
+      <if test="timeInsert != null">
+        #{timeInsert,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeUpdate != null">
+        #{timeUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delta != null">
+        #{delta,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="pojo.book_content">
+    update book_content
+    <set>
+      <if test="bookname != null">
+        bookName = #{bookname,jdbcType=VARCHAR},
+      </if>
+      <if test="groupid != null">
+        groupId = #{groupid,jdbcType=INTEGER},
+      </if>
+      <if test="timeInsert != null">
+        time_insert = #{timeInsert,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeUpdate != null">
+        time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delta != null">
+        delta = #{delta,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="pojo.book_content">
+    update book_content
+    set bookName = #{bookname,jdbcType=VARCHAR},
+      groupId = #{groupid,jdbcType=INTEGER},
+      time_insert = #{timeInsert,jdbcType=TIMESTAMP},
+      time_update = #{timeUpdate,jdbcType=TIMESTAMP},
+      delta = #{delta,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+<!--  ####自定义-->
+  <select id="selectListByBookName" parameterType="system.SystemBooksInfo" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from book_content
+    where bookName = #{bookname,jdbcType=VARCHAR}
+  </select>
+
+  <insert id="insertNewBlock" parameterType="pojo.book_content">
+    insert into book_content (id,bookName, groupId,
+      time_insert, time_update, delta
+      )
+    values (#{id,jdbcType=INTEGER},#{bookname,jdbcType=VARCHAR}, #{groupid,jdbcType=INTEGER},
+      #{timeInsert,jdbcType=TIMESTAMP}, #{timeUpdate,jdbcType=TIMESTAMP}, #{delta,jdbcType=VARCHAR}
+      )
+    <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+  </insert>
+  <select id="lastId" resultType="int">
+    SELECT LAST_INSERT_ID()
+  </select>
+</mapper>

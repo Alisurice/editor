@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<!--    <meta name="viewport" blockContainer="width=device-width, initial-scale=1.0">-->
+    <title>test div</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function ImgTool(tooldiv) {
+            this.tool = tooldiv;
+            this.tool.style.display='none';
+            this.showTool=function (object) {
+                this.tool.style.width=object.style.width;
+                // alert(object.style.height);
+                this.tool.style.height=object.style.height;
+                this.tool.style.position='float';
+                this.tool.style.display='block';
+                this.tool.style.border='1px solid #3D4EFF';
+                this.tool.offsetTop=object.offsetTop;
+                this.tool.offsetLeft=object.offsetLeft;
+                this.tool.style.position='absolute';
+
+            }
+        }
+    </script>
+    <style>
+
+        .d0{
+            border: 1px solid #ff3a13 ;
+            max-width:min-content;
+            position: absolute;
+            /*text-align: center;*/
+            /*height:min-blockContainer;*/
+            /*display: inline-block;*/
+            /*left:20%;*/
+            /*top:20%;*/
+            /*overflow: auto;*/
+            /*resize: horizontal;*/
+            /*transform: scale(2,2);*/
+            /*transform-origin: 0 0;*/
+        }
+        #div1{
+            visibility:hidden;
+            width: 15em;
+            height: 1em;
+            overflow: auto;
+            resize: horizontal;
+            /*不要设置左右边框？会出现滑条，或许需要再调一调*/
+            border: 1px solid black;
+            /*border-top: 1px solid #ff1df8;*/
+            /*border-bottom: 1px solid #ff1df8;*/
+
+        }
+        #div0:hover #div1{
+            color: #1e88e5;
+            visibility:visible;
+        }
+        #div2{
+            /*position: relative;*/
+            /*max-width: available;*/
+
+            word-break: break-word;
+            word-wrap:break-word;
+
+
+
+        }
+        #div2 *{
+            resize: both;
+            max-width: 100%;
+
+        }
+        #imgtool{
+            display: none;
+        }
+
+
+    </style>
+
+
+
+</head>
+<body>
+
+
+hhhh
+<!--<div id="test" style="height: 100px;width: 100px;border: 1px solid #3D4EFF;position: absolute;" >-->
+</div>
+    <div id="div0" class="d0" >
+
+        <div id="div1" class="d1" ></div>
+        <div id="div2" contenteditable="true">
+            <div id="imgtool" ></div>
+            <img id="re" src="fishmen.jpg" style="width: 300px;height: 200px;"/></div></div>
+    </div>
+
+<script>
+    let a = new ImgTool(document.getElementById("imgtool"));
+    a.showTool(document.getElementById("re"));
+
+</script>
+<script>
+    function draggable(ele){
+        ele=ele.parentNode;
+        alert(ele);
+        ele.addEventListener('mousedown',start,false);
+
+        let startX,startY;
+
+        function start(event){
+            startX=event.pageX;startY=event.pageY;
+            document.addEventListener('mousemove',move,false);
+            document.addEventListener('mouseup',up,false);
+        }
+
+        function move(event){
+            let newX=event.pageX,
+                newY=event.pageY;
+            setElePos(newX-startX,newY-startY);
+            startX=newX;startY=newY;
+        }
+
+        function up(event){
+            document.removeEventListener('mousemove',move);
+            document.removeEventListener('mouseup',up);
+        }
+
+        function setElePos(distX,distY){
+            let pos=ele.getBoundingClientRect();
+            ele.style.left=(pos.left+distX)+'px';
+            ele.style.top=(pos.top+distY)+'px';
+        }
+    }
+    draggable(document.getElementById("div1"));
+</script>
+
+<!--<script>-->
+<!--    function te(e) {-->
+<!--        e.style.boxShadow="10px 10px 5px #888888";-->
+<!--        alert("hhh");-->
+<!--    }-->
+<!--</script>-->
+<!--<button onclick="te()" value="te">te</button>-->
+<script>
+
+    // $("img").click(function () {
+    //     alert("click");
+    //     document.getElementById('re').flur();
+    // });
+    $("img").focus(function () {
+        alert("focus");
+        // e.focus();
+    });
+    function f() {
+        alert("fo");
+    }
+</script>
+</body>
+</html>

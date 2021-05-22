@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" >
+    <title>Title</title>
+<!--    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>-->
+    <script src="http_code.jquery.com_jquery-3.3.1.js"></script>
+    <script src="./quill/dist/quill.js"></script>
+
+    <script src="./util/textBlock.js"></script>
+    <script src="./util/bookEvent.js"></script>
+    <script src="./util/book.js"></script>
+    <script src="./util/dcm.js"></script>
+
+    <link href="./quill/dist/quill.snow.css" rel="stylesheet">
+    <link href="utilcss/viewstruct.css" rel="stylesheet">
+<!--    <script src="https://cdn.bootcdn.net/ajax/libs/quill/2.0.0-dev.3/quill.js"></script>-->
+<!--    <link href="https://cdn.bootcdn.net/ajax/libs/quill/2.0.0-dev.3/quill.snow.css" rel="stylesheet">-->
+    <style>
+        *{
+            font-family:"Microsoft YaHei";
+        }
+        #editor{
+
+            width:500px;
+            height: 500px;
+            border: 1px solid red;
+            /*overflow: scroll ;*/
+            overflow: scroll;
+            /*z-index: 0;*/
+        }
+        #imgTool{
+            display: none;
+        }
+        #createbook {
+            background-color: rgba(169,169,169,0.1);
+            color: rgba(0,0,0,0.2);
+            border: 1px solid rgba(0,0,0,0.2);
+            border-radius: 4px;
+            padding: 5px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            position: fixed;
+            bottom: 5px;
+            right: 5px;
+        }
+        #createbook:active {
+            background-color: rgba(169,169,169,0.5);
+            color: rgba(0,0,0,0.5);
+        }
+
+    </style>
+
+
+
+
+
+</head>
+<body>
+
+<div id="editor" >
+<!--    <div id="test" style="width:2000px;height:2000px;border: 1px solid black;"></div>-->
+</div>
+<div id="imgTool" onclick="clickStopPropagation('imgtool')"></div>
+<script >
+    //禁用页面前进后退
+    history.pushState(null, null, document.URL);
+    window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+    });
+</script>
+<button id="createbook">craete book</button>
+
+<script>
+    let ele = document.getElementById('editor');
+    console.log('ele'+ele.id);
+    ele.scrollTo(400,400);
+</script>
+<script>
+    // let a = {'mysql':undefined,'abc':"adf"};
+    // console.log(a['sb']);
+    // param is like 'button'(id="button")
+    function createBookEvent(buttonId,containerDiv) {
+        console.log("in createBookEvent");
+        $('#'+buttonId).click(()=>{return createBook(containerDiv)});
+
+        // function createBook() {
+        //     console.log("createbook");
+        //     // let name = prompt("Enter name to create book", "");
+        //     if (name != null && name != "") {
+        //         // FOR TEST
+        //         let book = new BookEvent();
+        //         book.createBookPromise(name)
+        //             .then(result=>{
+        //                 if(result.success != null){
+        //                     console.log("createBookEvent success:"+result.success);
+        //                     return book.openBookPromise(result.success)
+        //                 }
+        //                 else {
+        //                     console.log("createBookEvent fail"+result['response']);
+        //                     return result;
+        //                 }
+        //             })
+        //             .then(result=>console.log(result))
+        //             .catch(error=>console.log(error));
+        //         // book.createBookPromise(name);
+        //         console.log("createBook……");
+        //     }
+        // }
+        // new Promise(createBook).then(value => console.log(value));
+
+        async function createBook(containerDiv) {
+            console.log("createbook");
+            let name = prompt("Enter name to create book", "");
+            if (name != null && name != "") {
+                // FOR TEST
+                let book = new BookEvent();
+                try {
+                    let response = await book.createBookPromise(name);
+
+                    //create book success
+                    if(response.success != null){
+                        console.log("createBookEvent success:"+response.success);
+                        response = await openBookEvent(containerDiv, response.success)
+                    }
+                    else {
+                        console.log("createBookEvent fail"+response['response']);
+                    }
+
+                    console.log(response);
+
+                }catch (error) {
+                    console.log(error)
+                }
+                // book.createBookPromise(name);
+                console.log("createBook……");
+            }
+        }
+        // createBook().catch(response=>console.log(response));
+        // console.log("test async");
+    }
+    //test :create book
+    createBookEvent('createbook',$('#editor'));
+
+
+    //you need to await or fetch function when it's name with event or promise
+    async function openBookEvent(containerDiv,name) {
+        let result_focusViewPort;
+        try {
+            let response = await new BookEvent().openBookPromise(name);
+            console.log(response);
+
+            //create Book
+            if(response.success != null){
+                let bookInfo = response.success;
+                console.log("openBookEvent success:"+ JSON.stringify(bookInfo));
+                result_focusViewPort = new Book(containerDiv,bookInfo);
+
+                //get block list of the book from db
+                await reloadBookEvent(result_focusViewPort);
+                console.log("openBookEvent:reload finish");
+
+            }
+            else {
+                console.log("openBookEvent fail:"+response['response']);
+            }
+        }catch (e) {
+            console.log(e);
+        }
+        return result_focusViewPort;
+
+    }
+    // //test :open book
+    // openBookEvent($('#editor'),'考虑渐看').catch(reason => console.log(reason));
+
+    function reloadBookEvent(book) {
+        let dcm = new DCM();
+        return dcm.reloadBookPromise(book)
+    }
+
+
+</script>
+
+<!--测试:姑且假设我们是处于点击打开笔记本事件中的
+    于是，系统试图加载这个笔记本的相关内容。对于一个空笔记本，则还要进行初始化。
+-->
+<script>
+
+</script>
+
+
+<!--区块block：创建函数，已经包含了quill-->
+<script>
+    function BlockList() {
+        this.mainEditorArea=document.getElementById("editor");
+        this.list=new Map();
+
+        this.createBlock=function (e) {
+
+        };
+    }
+    var blockList = new BlockList();
+
+    // var a = new TextBlock();
+    // alert(a.nav.id);
+    // console.log(a);
+
+</script>
+
+<script>
+    //和已经创建的nav绑定事件，
+    $(".nav").mousedown(dragNav);
+</script>
+
+<!--区块block：相关事件处理流-->
+<script>
+    let count = 0;
+    async function createBlockEvent(event) {
+        console.log("pagex:"+event.pageX);
+        // console.log("pagex offset:"+event.pageXOffset);
+        if(count < 1){
+            try {
+                let focusViewport = await openBookEvent(document.getElementById('editor'),'考虑渐看');
+                console.log("createBlockEvent:focusViewport:");
+                console.log(focusViewport);
+                new TextBlock(focusViewport);
+            }catch (e) {
+                console.log(e);
+            }
+
+
+            count++;
+            console.log("@@@@@@@@@@count:"+count);
+        }
+        // event.stopPropagation();
+        // alert("create");
+
+    }
+    $('#editor').click(createBlockEvent);
+</script>
+
+
+
+<!--为block内的多媒体准备的悬浮控制框-->
+<script>
+    function ImgTool(toolDiv) {
+        this.tool = toolDiv;
+        this.tool.style.display='none';
+        this.tool.style.position='absolute';
+
+
+        let padding = 20;
+
+        //置于浅层，这样鼠标移动到内部的其他元素上面时也不会判定mouseleave
+        this.tool.style.zIndex="1";
+        //预留的缓冲区，方便进行操作的同时tool不会触发hideToolAction
+        this.tool.style.padding=padding+"px";
+        this.hideToolAction=function () {
+            //当移出imgTool区域后就消失
+            $(this.tool).mouseleave(function (e) {
+                e.target.style.display='none';
+            })
+        }
+
+        this.showTool=function (object) {
+
+            this.tool.style.display='block';
+
+            this.tool.style.width="calc("+$(object).width() +"px + "+padding*2+"px)";
+            this.tool.style.height="calc("+$(object).height() +"px + "+padding*2+"px)";
+            // alert("calc("+object.style.width +"-"+padding+"px)"+this.tool.style.width);
+            // this.tool.style.width=object.style.width;
+            // alert("calc("+$(object).width() +" + "+padding*2+"px)");
+            // this.tool.style.height=object.style.height;
+
+
+            //set site
+            // this.tool.offsetTop=object.offsetTop;
+            // this.tool.offsetLeft=object.offsetLeft;
+            let pos=object.getBoundingClientRect();
+            //预留区域padding和增加宽度width都是一个padding宽
+            this.tool.style.left=(pos.left-padding*2)+'px';
+            this.tool.style.top=(pos.top-padding*2)+'px';
+
+            //test
+            this.tool.style.border='1px solid #3D4EFF';
+        }
+
+
+    }
+    let imgTool = new ImgTool(document.getElementById("imgTool"));
+    // imgTool.showTool(document.getElementById("re"));
+
+    function imgToolAction() {
+        $(".content img").click(function (e) {
+            // alert(e.target);
+            imgTool.showTool(e.target);
+            imgTool.hideToolAction();
+
+        })
+        $(".content img").mousemove(function () {
+
+        })
+    }
+
+    //为content已有内容绑定监听器
+    imgToolAction();
+    // content内容更新时为新元素添加监听器
+    $(".content").change(imgToolAction());
+
+</script>
+
+</body>
+</html>

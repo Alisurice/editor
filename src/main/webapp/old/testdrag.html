@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+
+<div id="test" style="height: 100px;width: 100px;border: 1px solid #3D4EFF;position: absolute;" >
+    <div id="t2" style="height: 50px;width: 50px;border: 1px solid #3D4EFF;position: absolute;"
+    onmousedown="dragParent(this)"></div>
+</div>
+
+<script>
+    function draggable(ele){
+        ele=ele.parentNode;
+        ele.addEventListener('mousedown',start,false);
+
+        let startX,startY;
+
+        function start(event){
+            startX=event.pageX;startY=event.pageY;
+            ele.addEventListener('mousemove',move,false);
+            ele.addEventListener('mouseup',up,false);
+        }
+
+        function move(event){
+            let newX=event.pageX,
+                newY=event.pageY;
+            setElePos(newX-startX,newY-startY);
+            startX=newX;startY=newY;
+        }
+
+        function up(event){
+            alert("up");
+            ele.removeEventListener('mousedown',start,false);
+            ele.removeEventListener('mousemove',move,false);
+            ele.removeEventListener('mouseup',up,false);
+        }
+
+        function setElePos(distX,distY){
+            let pos=ele.getBoundingClientRect();
+            ele.style.left=(pos.left+distX)+'px';
+            ele.style.top=(pos.top+distY)+'px';
+        }
+    }
+    function dragParent(node){
+
+            draggable(node);
+
+    }
+
+</script>
+</body>
+</html>

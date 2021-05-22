@@ -1,0 +1,65 @@
+<html lang="cn">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>Insert title here</title>
+    <!-- Include Quill stylesheet -->
+    <!-- Main Quill library -->
+    <script src="../../../../node_modules/quill/dist/quill.js"></script>
+<!--    <script src="Devquill/quill.js"></script>-->
+
+    <!-- Theme included stylesheets -->
+<!--    <link href="node_modules/quill/quill.snow.css" rel="stylesheet">-->
+<!--    <link href="node_modules/quill/quill.bubble.css" rel="stylesheet">-->
+    <link href="../../../../node_modules/quill/dist/quill.snow.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        function f() {
+            $("img").focus(function () {
+                // e.style.boxShadow="10px 10px 5px #888888";
+                alert("hhh");
+            });
+        }
+
+    </script>
+</head>
+<body>
+
+
+
+<!-- 创建编辑器容器 -->
+<div id="editor">
+    <p>Hello World!</p>
+    <p>Some initial <strong>bold</strong> text</p>
+    <p><br></p>
+
+</div>
+<div id="editor2">
+    <p>Hello World!</p>
+    <p>Some initial <strong>bold</strong> text</p>
+    <p><br></p>
+    <button onclick="f()"value="img"/>
+</div>
+
+<!--<div id="editor2" style="border: #1e88e5;height: 15px;" align="">-->
+
+</div>
+
+<!-- 初始化Quill编辑器 -->
+<script>
+
+    const toolbarOptions = ['bold', 'italic', 'underline', 'link','image'];
+    var quill = new Quill('#editor', {
+        modules: { toolbar: toolbarOptions},
+        theme: 'snow'
+    });
+    // var e2 = document.getElementById("editor2");
+    // e2 = document.querySelector("editor").innerHTML;
+    // console.log(quill.getBounds(0,3));
+    // console.log(quill.history);
+    // quill.deleteText();
+
+</script>
+</body>
+</html>

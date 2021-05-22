@@ -1,0 +1,91 @@
+<html>
+
+<head>
+    <!-- 引入样式文件 -->
+<!--    <link href="https://cdn.quilljs.com/1.3.4/quill.snow.css" rel="stylesheet">-->
+    <link href="../../../../node_modules/quill/dist/quill.snow.css" rel="stylesheet">
+    <!-- 引入Quill库文件 -->
+<!--    <script src="https://cdn.quilljs.com/1.3.4/quill.js"></script>-->
+    <script src="../../../../node_modules/quill/dist/quill.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $("img").focus(function () {
+            // e.style.boxShadow="10px 10px 5px #888888";
+            alert("hhh");
+        });
+
+    </script>
+</head>
+
+<body>
+
+
+<!-- 创建一个编辑器容器 -->
+<div id="editor1" style="height: 100px;">
+    <p>editor1"</p >
+    <p>Some initial <strong>bold</strong> text</p >
+    <p>
+    </p >
+</div>
+
+<div id="editor2" style="size: 100px;" onmousedown="mouseDown()" onmouseup="mouseUp()">
+    <p>editor2</p >
+    <p>Some initial <strong>bold</strong> text</p >
+    <p>
+    </p >
+</div>
+
+<button onclick="test()">console</button>
+
+
+<!-- 初始化Quill编辑器 -->
+<script>
+    var quill_1;
+    var quill_2;
+    var content1;
+    var content2;
+    var length1;
+    var length2;
+
+    function initQuill(id){
+        return new Quill(id, {
+            theme: 'snow'
+        });
+    }
+
+
+    // let q1 = new initQuill('#editor1');
+    // let q2 = new initQuill('#editor2')
+    var q1 = new Quill('#editor1', {
+        modules: {
+            toolbar: false
+        },
+        theme: 'snow'
+    });
+    var q2 = new Quill('#editor2', {
+        modules: {
+            toolbar: false
+        },
+        theme: 'snow'
+    });
+    // 按钮测试方法
+    function test(){
+        content1 = quill_1.getContents();
+        length1 = quill_1.getLength();
+        var text1 = quill_1.getText();
+        console.log(content1);
+        console.log(length1);
+        console.log(text1);
+
+        content2 = quill_2.getContents();
+        length2 = quill_2.getLength();
+        console.log(content2);
+        console.log(length2);
+
+
+    };
+</script>
+</body>
+
+</html>
