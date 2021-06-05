@@ -205,16 +205,16 @@ function TextBlock(bookObj, blockInfo, blockAttr){
 
 
         //block拖动事件
-        $(block.nav).mousedown(function (e) {
+        block.nav.onpointerdown=function (e) {
             dragNav(e,bookObj);
-        });
+        };
 
         //focusViewport里面的所有元素都要建立click事件的拦截器，防止穿透到focusViewport.Ele
         //引发container相关的对视图进行操作的事件
         $(block.Ele).on('click', clickStopPropagation);
         $(block.Ele).children().on('click', clickStopPropagation);
         //拦截drag事件，防止穿透，要注意mousedown也会拦截click事件，所以不能绑定给children
-        $(block.Ele).on('mousedown', clickStopPropagation);
+        $(block.Ele).on('pointerdown', clickStopPropagation);
         // $(block.Ele).children().on('mousedown', clickStopPropagation);
 
 
@@ -249,7 +249,7 @@ function dragNav(e,book){
     //专为block结构设置的，使得移动对象从nav变为nav的上层，即this.Ele
     let ele = e.target;
     ele=ele.parentNode;
-    ele.addEventListener('mousedown',start,false);
+    ele.addEventListener('pointerdown',start,false);
 
     let startX,startY;
 
@@ -258,9 +258,9 @@ function dragNav(e,book){
         startX=event.pageX;startY=event.pageY;
         //因为这种事件绑定，mouse一旦超出ele 范围，就会失效，
         //设定为document，也就是全局之后就没有问题了
-        document.addEventListener('mousemove',move,false);
+        document.addEventListener('pointermove',move,false);
 
-        document.addEventListener('mouseup',up,false);
+        document.addEventListener('pointerup',up,false);
     }
 
     function move(event){
@@ -277,9 +277,9 @@ function dragNav(e,book){
         setTimeout(function() {
             isDraging = false;
         }, 100);
-        ele.removeEventListener('mousedown',start,false);
-        document.removeEventListener('mousemove',move,false);
-        document.removeEventListener('mouseup',up,false);
+        ele.removeEventListener('pointerdown',start,false);
+        document.removeEventListener('pointermove',move,false);
+        document.removeEventListener('pointerup',up,false);
     }
 
     function setElePos(distX,distY){

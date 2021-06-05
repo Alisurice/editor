@@ -27,7 +27,8 @@ function Book(viewportEle, bookInfo) {
     this.divList=[];
 
     //viewport拖动事件
-    $(this.bookEle).mousedown(dragVP);
+    // $(this.bookEle).mousedown(dragVP);
+    this.bookEle.onpointerdown = dragVP;
 
     //点击viewport vp就创建block
     let book = this;
@@ -161,9 +162,9 @@ function Book(viewportEle, bookInfo) {
             startX=event.clientX;startY=event.clientY;
             //因为这种事件绑定，mouse一旦超出ele 范围，就会失效，
             //设定为document，也就是全局之后就没有问题了
-            document.addEventListener('mousemove',move,false);
+            document.addEventListener('pointermove',move,false);
 
-            document.addEventListener('mouseup',up,false);
+            document.addEventListener('pointerup',up,false);
         }
 
         // let wait = false;
@@ -201,8 +202,8 @@ function Book(viewportEle, bookInfo) {
                 isDraging = false;
             }, 100);
             // Ele.removeEventListener('mousedown',start,false);
-            document.removeEventListener('mousemove',move,false);
-            document.removeEventListener('mouseup',up,false);
+            document.removeEventListener('pointermove',move,false);
+            document.removeEventListener('pointerup',up,false);
             // window.clearInterval(timeId);
         }
 
